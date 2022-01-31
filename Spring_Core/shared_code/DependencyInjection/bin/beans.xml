@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+<bean id="item" class="com.spring.test.Item">
+	<property name="name" value="Laptop" />
+	<property name="price" value="50000.0" />
+</bean>
+
+<bean id="order" class="com.spring.test.Order">
+	<property name="item" ref="item" />
+	<property name="title" value="Purchase Laptops" />
+</bean>
+
+</beans>
