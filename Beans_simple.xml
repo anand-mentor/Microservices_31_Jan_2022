@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:context="http://www.springframework.org/schema/context"
+xsi:schemaLocation="http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- Enable Annotation based configuration -->
+	<context:annotation-config />
+
+	<bean id="lifeCycle" class="com.spring.SpringCoreDemo.LifeCycleBean"
+			init-method="myInit" destroy-method="myDestroy">
+		<property name="message" value="Welcome to the world of Spring!"/>
+	</bean>
+<!-- 
+	<bean id="messagePrinter" class="com.spring.SpringCoreDemo.MessagePrinterBean"
+			lazy-init="false" init-method="myInit" destroy-method="myDestroy">
+		<property name="message" value="Welcome to the world of Spring!"/>
+	</bean>
+
+	<bean id="project_1" class="com.spring.SpringCoreDemo.ProjectBean">
+	    <property name="name" value="OpenOffice" />
+	    <property name="department" value="Support" />
+	</bean>
+
+	<bean id="project_2" class="com.spring.SpringCoreDemo.ProjectBean">
+	    <property name="name" value="MSOffice" />
+	    <property name="department" value="Support" />
+	</bean>
+
+ 	
+	<bean id="employee" class="com.spring.SpringCoreDemo.EmployeeBean">
+	    <property name="name" value="Ivan" />
+	</bean>
+ -->
+	<bean class="com.spring.SpringCoreDemo.MyBeanPostProcessor" /> 
+
+</beans>
