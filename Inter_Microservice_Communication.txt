@@ -1,0 +1,81 @@
+//OLX-Masterdata
+public class CategoryController {
+
+	@Autowired
+	private CategoryService categoryService;
+	
+	@GetMapping(value="/category", produces=MediaType.APPLICATION_JSON_VALUE)
+	public List<Category> getAllCategories() {
+		return categoryService.getAllCategories();
+	}
+
+	@GetMapping(value="/category/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public Category getCategoryById(@PathVariable("id") String strCategoryId) {
+		return categoryService.getCategoryById(Long.parseLong(strCategoryId));
+	}
+}
+
+
+//OLX-Advertise
+@SpringBootApplication
+public class OlxAdvertisesApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(OlxAdvertisesApplication.class, args);
+	}
+	
+	@Bean
+	public RestTemplate getRestTemplate() {
+		return new RestTemplate();
+	}
+	
+}
+public class AdvertiseController {
+
+	@Autowired
+	private AdvertiseService advertiseService;
+	
+	@PostMapping(value="/advertise", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<AdvertiseDTO> createNewAdvertise(@RequestBody AdvertiseDTO advertiseDto, @RequestHeader("Authorization") String authToken) {
+		AdvertiseDTO advertiseDTO = this.advertiseService.createNewAdvertise(advertiseDto, authToken);
+		return new ResponseEntity<AdvertiseDTO>(advertiseDTO, HttpStatus.OK);
+	}
+}
+@Service
+public class AdvertiseServiceImpl implements AdvertiseService {
+
+	@Autowired
+	MasterdataServiceDelegate masterdataServiceDelegate;
+	
+	@Override
+	public AdvertiseDTO createNewAdvertise(AdvertiseDTO advertiseDto, String authToken) {
+		/*
+		if(loginServiceDelegate.isValidUser(authToken)==false) {
+			throw new InvalidTokenException(authToken);
+		}
+		*/
+		Category category = masterdataServiceDelegate.getCategoryById(""+advertiseDto.getCategoryId());
+		System.out.println("category = " + category);
+		//store advertise into database
+		return null;
+	}
+}
+public interface MasterdataServiceDelegate {
+
+	Category getCategoryById(String categoryId);
+}
+@Service
+public class MasterdataServiceDelegateImpl implements MasterdataServiceDelegate {
+
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	@Override
+	public Category getCategoryById(String categoryId) {
+		Category category = 
+				this.restTemplate.getForObject("http://localhost:8080/categories/category/" + 
+						categoryId, Category.class);
+		return category;
+	}
+
+}
